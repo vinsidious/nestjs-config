@@ -4,3 +4,9 @@ src/
 yarn.lock
 yarn-error.log
 package-lock.json
+.github/
+.travis.yml
+tsconfig.json
+.gitignore
+.prettierignore
+.prettierrc
