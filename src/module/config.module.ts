@@ -16,11 +16,16 @@ export class ConfigModule {
    * @param {DotenvConfigOptions} options
    * @returns {DynamicModule}
    */
-  static load(glob?: string, options?: DotenvConfig): DynamicModule {
+  static load(options?: DotenvConfig): DynamicModule;
+  static load(glob?: string, options?: DotenvConfig): DynamicModule;
+  static load(
+    globOrOptions?: string | DotenvConfig,
+    options?: DotenvConfig,
+  ): DynamicModule {
     const configProvider = {
       provide: ConfigService,
       useFactory: async (): Promise<ConfigService> => {
-        return ConfigService.load(glob, options);
+        return ConfigService.load(globOrOptions, options);
       },
     };
     return {

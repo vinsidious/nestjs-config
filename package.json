@@ -1,6 +1,6 @@
 {
   "name": "@vinsidious/nestjs-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Easy to use Nest congifuration module",
   "main": "index.js",
   "repository": "github:vinsidious/nestjs-config",

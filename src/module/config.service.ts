@@ -54,11 +54,6 @@ export class ConfigService {
    * @param {DotenvConfig} options
    * @returns {Promise<any>}
    */
-  static async load(options?: DotenvConfig | false): Promise<ConfigService>;
-  static async load(
-    glob?: string,
-    options?: DotenvConfig | false,
-  ): Promise<ConfigService>;
   static async load(
     globOrOptions?: string | DotenvConfig | false,
     options?: DotenvConfig | false,
