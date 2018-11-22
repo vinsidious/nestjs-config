@@ -2,11 +2,20 @@ import { Injectable } from '@nestjs/common';
 import * as assert from 'assert';
 import * as get from 'lodash.get';
 import * as set from 'lodash.set';
-import * as dotenv from 'dotenv';
-import { DotenvOptions } from 'dotenv';
+import * as dotenv from 'dotenv-flow';
+import { DotenvConfigOptions } from 'dotenv';
 import * as path from 'path';
 import { Glob, sync as globSync } from 'glob';
 import { ProxyProperty } from '../decorators/proxy';
+
+/**
+ * Add a couple of options to the default config options' interface.
+ */
+export interface DotenvConfig extends DotenvConfigOptions {
+  cwd?: string;
+  glob?: string;
+  defaultNodeEnv?: string;
+}
 
 export interface ModuleConfig {
   [key: string]: any;
@@ -42,25 +51,39 @@ export class ConfigService {
   /**
    * Load configuration from file system
    * @param glob string
-   * @param {DotenvOptions} options
+   * @param {DotenvConfig} options
    * @returns {Promise<any>}
    */
+  static async load(options?: DotenvConfig | false): Promise<ConfigService>;
   static async load(
     glob?: string,
-    options?: DotenvOptions | false,
+    options?: DotenvConfig | false,
+  ): Promise<ConfigService>;
+  static async load(
+    globOrOptions?: string | DotenvConfig | false,
+    options?: DotenvConfig | false,
   ): Promise<ConfigService> {
-    glob = typeof glob === 'undefined' ? ConfigService.defaultGlob : glob;
+    let glob: string;
 
-    const configs = await this.loadConfigAsync(glob, options);
+    if (typeof globOrOptions === 'object') {
+      glob = globOrOptions.glob || ConfigService.defaultGlob;
+      options = globOrOptions;
+    } else if (typeof globOrOptions === 'string') {
+      glob = globOrOptions;
+    } else {
+      glob = ConfigService.defaultGlob;
+    }
+
+    const configs = await this.loadConfigAsync(glob, options || false);
     return new ConfigService(configs);
   }
 
   /**
    * Load config synchronously
    * @param {string} glob
-   * @param {DotenvOptions | false} options
+   * @param {DotenvConfig | false} options
    */
-  static loadSync(glob: string, options?: DotenvOptions | false) {
+  static loadSync(glob: string, options?: DotenvConfig | false) {
     const configs = this.loadConfigSync(glob, options);
 
     return new ConfigService(configs);
@@ -118,7 +141,7 @@ export class ConfigService {
    * @param glob
    * @param options
    */
-  async merge(glob: string, options?: DotenvOptions): Promise<void> {
+  async merge(glob: string, options?: DotenvConfig): Promise<void> {
     const config = await ConfigService.loadConfigAsync(glob, options);
 
     Object.keys(config).forEach(configName => {
@@ -129,10 +152,10 @@ export class ConfigService {
   /**
    * Merge configuration synchronously
    * @param {string} glob
-   * @param {DotenvOptions} options
+   * @param {DotenvConfig} options
    * @returns {ConfigService}
    */
-  mergeSync(glob: string, options?: DotenvOptions): ConfigService {
+  mergeSync(glob: string, options?: DotenvConfig): ConfigService {
     const config = ConfigService.loadConfigSync(glob, options);
 
     Object.keys(config).forEach(configName => {
@@ -200,12 +223,12 @@ export class ConfigService {
 
   /**
    * @param {string | string[]} glob
-   * @param {DotenvOptions | false} options
+   * @param {DotenvConfig | false} options
    * @returns {Promise<Config>}
    */
   protected static loadConfigAsync(
     glob: string,
-    options?: DotenvOptions | false,
+    options?: DotenvConfig | false,
   ): Promise<Config> {
     glob = this.src(glob);
     return new Promise((resolve, reject) => {
@@ -227,12 +250,12 @@ export class ConfigService {
   /**
    * Load config synchronously
    * @param {string} glob
-   * @param {DotenvOptions | false} options
+   * @param {DotenvConfig | false} options
    * @returns {Config}
    */
   protected static loadConfigSync(
     glob: string,
-    options?: DotenvOptions | false,
+    options?: DotenvConfig | false,
   ): Config {
     glob = this.src(glob);
     const matches = globSync(glob);
@@ -290,11 +313,15 @@ export class ConfigService {
 
   /**
    * Loads env variables via dotenv.
-   * @param {DotenvOptions | false} options
+   * @param {DotenvConfig | false} options
    */
-  protected static loadEnv(options?: DotenvOptions | false): void {
+  protected static loadEnv(options?: DotenvConfig | false): void {
     if (options !== false) {
-      dotenv.load(options || ConfigService.defaultDotenvConfig());
+      options = options || ConfigService.defaultDotenvConfig();
+      // In case the user still provides a direct path to a `.env` file
+      options.cwd = options.cwd || options.path.replace(/\.env$/, '');
+      (options as any).default_node_env = options.defaultNodeEnv;
+      dotenv.config(options || ConfigService.defaultDotenvConfig());
     }
   }
 
@@ -305,7 +332,7 @@ export class ConfigService {
    */
   protected static defaultDotenvConfig() {
     return {
-      path: path.join(process.cwd(), '.env'),
+      path: path.join(process.cwd()),
     };
   }
 }

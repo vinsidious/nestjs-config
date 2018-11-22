@@ -43,9 +43,10 @@
     deprecate "1.0.0"
     optional "0.1.4"
 
-"@types/dotenv@^4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-4.0.3.tgz#ebcfc40da7bc0728b705945b7db48485ec5b4b67"
+"@types/dotenv@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-6.1.0.tgz#fba2bfd1f28a46eadaa049f3313ebb89bdedfc53"
+  integrity sha512-gmbNb7V1LbJQA4MmH0hVFgqY1cyKsa6RvKC1Xrq0WBnZ0JuuvXKciXx/s8dN0LVXCJd8xO6wIaSFSyUIoGph9g==
   dependencies:
     "@types/node" "*"
 
@@ -917,6 +918,13 @@ domexception@^1.0.1:
   resolved "https://registry.yarnpkg.com/domexception/-/domexception-1.0.1.tgz#937442644ca6a31261ef36e3ec677fe805582c90"
   dependencies:
     webidl-conversions "^4.0.2"
+
+dotenv-flow@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/dotenv-flow/-/dotenv-flow-0.1.0.tgz#229b649bc335f98f2043c5ba94761f629c93c935"
+  integrity sha512-19UN7r2qCVGRftoq/9His+XRHEcKl4hZrpu/yfy6pOtk/n8cVyzJyzif7EKRj7caM8cNMHiDFhbhksobzNPjmA==
+  dependencies:
+    dotenv "^6.0.0"
 
 dotenv@^6.0.0:
   version "6.0.0"

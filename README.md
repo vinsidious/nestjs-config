@@ -10,7 +10,9 @@
 <p align="center">Configuration component for NestJs.</p>
 
 
+## Note
 
+This is a fork of the original [`nestjs-config`](https://github.com/nestjs-community/nestjs-config) which has been modified to use [`dotenv-flow`](https://github.com/kerimdzhanov/dotenv-flow) instead of [`dotenv`](https://www.npmjs.com/package/dotenv).
 
 ## Features
 
