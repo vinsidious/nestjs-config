@@ -37,7 +37,7 @@ export class ConfigService {
   private static config: Config;
   private readonly helpers: CustomHelper = {};
 
-  protected static defaultGlob: string = 'config/**/!(*.d).{ts,js}';
+  protected static defaultGlob: string = 'src/config/**/!(*.d).{ts,js}';
   static srcPath?: string;
 
   /**
@@ -310,14 +310,17 @@ export class ConfigService {
    * Loads env variables via dotenv.
    * @param {DotenvConfig | false} options
    */
-  protected static loadEnv(options?: DotenvConfig | false): void {
-    if (options !== false) {
-      options = options || ConfigService.defaultDotenvConfig();
-      // In case the user still provides a direct path to a `.env` file
-      options.cwd = options.cwd || options.path.replace(/\.env$/, '');
-      (options as any).default_node_env = options.defaultNodeEnv;
-      dotenv.config(options || ConfigService.defaultDotenvConfig());
+  protected static loadEnv(options: DotenvConfig | false = {}): void {
+    options = { ...ConfigService.defaultDotenvConfig(), ...options };
+
+    (options as any).default_node_env = options.defaultNodeEnv;
+
+    if (options.path) {
+      options.cwd = options.path.replace(/\.env$/, '');
+      delete options.path;
     }
+
+    dotenv.config(options);
   }
 
   /**
@@ -327,7 +330,8 @@ export class ConfigService {
    */
   protected static defaultDotenvConfig() {
     return {
-      path: path.join(process.cwd()),
+      cwd: path.join(process.cwd(), 'config'),
+      defaultNodeEnv: 'development',
     };
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@vinsidious/nestjs-config",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Easy to use Nest congifuration module",
   "main": "index.js",
   "repository": "github:vinsidious/nestjs-config",
@@ -20,6 +20,7 @@
     "coveralls": "yarn run coverage --coverageReporters=text-lcov | coveralls",
     "test:watch": "jest --watch",
     "build": "rm -rf ./dist && tsc && npm run build:index",
+    "build:watch": "rm -rf ./dist && tsc -w",
     "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts",
     "format": "prettier **/**/*.ts --ignore-path ./.prettierignore --write && git status",
     "prepublish": "npm run format && npm run build",
