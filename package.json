@@ -1,24 +1,14 @@
 {
-  "name": "nestjs-config",
-  "version": "1.2.8",
+  "name": "@vinsidious/nestjs-config",
+  "version": "1.0.2",
   "description": "Easy to use Nest congifuration module",
   "main": "index.js",
-  "repository": "git@github.com:nestjs-community/nestjs-config.git",
+  "repository": "github:vinsidious/nestjs-config",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Aaryanna Simonelli",
-      "email": "ashleighsimonelli@gmail.com"
-    },
-    {
-      "name": "Fabrizio Fenoglio",
-      "email": "fabri.feno@gmail.com"
-    },
-    {
-      "name": "Shady Khalifa",
-      "email": "shekohex@gmail.com"
-    }
-  ],
+  "author": {
+    "name": "Vince Coppola",
+    "email": "vincecoppola@gmail.com"
+  },
   "keywords": [
     "nestjs",
     "config",
@@ -32,7 +22,8 @@
     "build": "rm -rf ./dist && tsc && npm run build:index",
     "build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts",
     "format": "prettier **/**/*.ts --ignore-path ./.prettierignore --write && git status",
-    "prepublish": "npm run format && npm run build"
+    "prepublish": "npm run format && npm run build",
+    "release": "yarn publish --access public"
   },
   "peerDependencies": {
     "@nestjs/common": "^5.1.0"
